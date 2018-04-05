@@ -1,0 +1,26 @@
+---
+language: python
+python: "2.7"
+
+env:
+  - TESTBOOK=test.yml
+
+before_install:
+  - sudo apt-get update -qq
+
+install:
+  # Install Ansible.
+  - pip install ansible
+
+  # Add ansible.cfg to pick up roles path.
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+
+script:
+  # Check the role/playbook's syntax.
+  - "ansible-playbook -i tests/inventory tests/$TESTBOOK --syntax-check"
+  # Run role and ensure it completes successfully.
+  - "ansible-playbook -i tests/inventory tests/$TESTBOOK --skip-tags web-api"
+  # Run role again and check for idempotence.
+  - "ansible-playbook -i tests/inventory tests/$TESTBOOK --skip-tags web-api | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)"
+  # Check cloudflared has been installed correctly
+  - "cloudflared"
