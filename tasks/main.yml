@@ -14,6 +14,12 @@
   import_tasks: install_binary.yml
   when: (not cloudflared_installed) and (pkg_mgr_output is undefined or pkg_mgr_output is failed)
 
+- name: Set network capabilities for cloudflared
+  capabilities:
+    path: "{{ cloudflared_bin_location }}/cloudflared"
+    capability: cap_net_bind_service+ep
+    state: present
+
 - command: cloudflared update
   register: update_command
   changed_when: update_command.rc == '64'
