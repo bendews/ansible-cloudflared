@@ -36,6 +36,7 @@
     owner: cloudflared
     group: cloudflared
   notify: restart cloudflared service
+  tags: systemd
 
 - name: copy systemd service
   copy:
@@ -46,12 +47,14 @@
     mode: 0644
   notify: restart cloudflared service
   register: service
+  tags: systemd
 
 - name: enable systemd service
   service:
     name: cloudflared
     enabled: "{{ cloudflared_enable_service }}"
   when: service.changed
+  tags: systemd
 
 - name: Allow port in firewall
   ufw:
