@@ -23,6 +23,8 @@ script:
   - "ansible-playbook -i tests/inventory tests/$TESTBOOK --syntax-check"
   # Run role and ensure it completes successfully.
   - "ansible-playbook -i tests/inventory tests/$TESTBOOK --skip-tags systemd"
+  # Check setting ansible port
+  - "ansible-playbook -i tests/inventory tests/$TESTBOOK --extra-vars 'cloudflared_port=53' --skip-tags systemd"
   # Run role again and check for idempotence.
   - "ansible-playbook -i tests/inventory tests/$TESTBOOK --skip-tags systemd | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)"
   # Check cloudflared has been installed correctly
