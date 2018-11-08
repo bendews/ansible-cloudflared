@@ -14,6 +14,13 @@
   import_tasks: install_binary.yml
   when: (not cloudflared_installed) and (pkg_mgr_output is undefined or pkg_mgr_output is failed)
 
+- name: Set network capabilities for cloudflared
+  capabilities:
+    path: "{{ cloudflared_bin_location }}/cloudflared"
+    capability: cap_net_bind_service+ep
+    state: present
+  when: cloudflared_port|int < 1024
+
 - command: cloudflared update
   register: update_command
   changed_when: update_command.rc == '64'
@@ -30,6 +37,7 @@
     owner: cloudflared
     group: cloudflared
   notify: restart cloudflared service
+  tags: systemd
 
 - name: copy systemd service
   copy:
@@ -40,12 +48,14 @@
     mode: 0644
   notify: restart cloudflared service
   register: service
+  tags: systemd
 
 - name: enable systemd service
   service:
     name: cloudflared
     enabled: "{{ cloudflared_enable_service }}"
   when: service.changed
+  tags: systemd
 
 - name: Allow port in firewall
   ufw:
