@@ -1,8 +1,4 @@
 ---
-- name: set device architecture and package manager vars 
-  set_fact:
-    device_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm' }}"
-
 - name: build filename of file to be downloaded
   set_fact:
     cloudflared_file: "{{ vars['cloudflared_'+device_arch+'_'+ansible_pkg_mgr] }}"
