@@ -29,11 +29,6 @@
   register: update_command
   changed_when: update_command.rc == '64'
 
-- name: create application user
-  user:
-    name: cloudflared
-    system: yes
-
 - name: template config file
   template:
     src: cloudflared.j2
