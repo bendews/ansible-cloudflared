@@ -29,11 +29,6 @@
   register: update_command
   changed_when: update_command.rc == '64'
 
-- name: create application user
-  user:
-    name: cloudflared
-    system: yes
-
 - name: template config file
   template:
     src: cloudflared.j2
@@ -46,7 +41,7 @@
 - name: copy systemd service
   copy:
     src: cloudflared.service
-    dest: /lib/systemd/system/
+    dest: /etc/systemd/system/
     owner: root
     group: root
     mode: 0644
