@@ -33,8 +33,8 @@
   template:
     src: cloudflared.j2
     dest: /etc/default/cloudflared
-    owner: cloudflared
-    group: cloudflared
+    owner: nobody
+    group: nogroup
   notify: restart cloudflared service
   tags: systemd
 
