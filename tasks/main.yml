@@ -28,13 +28,18 @@
 - command: cloudflared update
   register: update_command
   changed_when: update_command.rc == '64'
+  
+- name: create application user
+  user:
+    name: cloudflared
+    system: yes
 
 - name: template config file
   template:
     src: cloudflared.j2
     dest: /etc/default/cloudflared
-    owner: nobody
-    group: nogroup
+    owner: cloudflared
+    group: cloudflared
   notify: restart cloudflared service
   tags: systemd
 
