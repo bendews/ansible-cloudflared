@@ -1,2 +1,5 @@
 # Commandline args for cloudflared
-CLOUDFLARED_OPTS={{ cloudflared_options }}
+CLOUDFLARED_OPTS={% if cloudflared_port is not none %}--port {{ cloudflared_port }} {% endif %}
+{% if cloudflared_metrics_address is not none %}--metrics {{ cloudflared_metrics_address }} {% endif %}
+{% if cloudflared_dns_address is not none %}--address {{ cloudflared_dns_address }} {% endif %}
+{% if cloudflared_upstream is not none %}--upstream {{ cloudflared_upstream }} {% endif %}
