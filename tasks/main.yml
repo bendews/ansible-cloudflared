@@ -28,7 +28,7 @@
 - command: cloudflared update
   register: update_command
   changed_when: update_command.rc == '64'
-  
+
 - name: create application user
   user:
     name: cloudflared
@@ -67,3 +67,5 @@
     port: "{{ cloudflared_port }}"
     comment: "allow cloudflared"
   when: cloudflared_allow_firewall
+
+- meta: flush_handlers
